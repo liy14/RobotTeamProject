@@ -1,9 +1,9 @@
 """
 Functions for moving the robot FORWARD and BACKWARD.
 Authors: David Fisher, David Mutchler and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+"""  # TODO: 1. Yi Li.
 
-# TODO: 2. Implment forward_seconds, then the relevant part of the test function.
+# DONE: 2. Implment forward_seconds, then the relevant part of the test function.
 #          Test and correct as needed.
 #   Then repeat for forward_by_time.
 #   Then repeat for forward_by_encoders.
@@ -27,6 +27,20 @@ def test_forward_backward():
       3. Same as #2, but runs forward_by_encoders.
       4. Same as #1, 2, 3, but tests the BACKWARD functions.
     """
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+
+    assert left_motor.connected
+    assert right_motor.connected
+
+    time_sp = int(input('Time:'))
+    speed = int(input('Speed:'))
+    action = str(input('Stop Action:'))
+    left_motor.run_forever(speed_sp=speed)
+    right_motor.run_forever(speed_sp=speed)
+    time.sleep(time_sp)
+    left_motor.stop()
+    right_motor.stop(stop_action=action)
 
 
 def forward_seconds(seconds, speed, stop_action):
