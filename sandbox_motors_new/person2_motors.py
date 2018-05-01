@@ -36,6 +36,7 @@ def test_spin_left_spin_right():
     assert right_motor.connected
 
     spin_left_seconds(4, 50, "brake")
+    spin_left_by_time(90,50,"brake")
 
 
 
@@ -47,7 +48,9 @@ def spin_left_seconds(seconds, speed, stop_action):
     """
     left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
     right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
-
+    seconds = int(input('Time'))
+    print(speed, stop_action, seconds)
+    print(type(speed))
     left_motor.run_forever(speed_sp=(-8 * speed), stop_action=stop_action)
     right_motor.run_forever(speed_sp=(8 * speed), stop_action=stop_action)
 
@@ -69,6 +72,18 @@ def spin_left_by_time(degrees, speed, stop_action):
       2. Sleep for the computed number of seconds.
       3. Stop moving.
     """
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+    degrees = int(input('Degrees'))
+
+    left_motor.run_forever(speed_sp=(-8 * speed), stop_action=stop_action)
+    right_motor.run_forever(speed_sp=(8 * speed), stop_action=stop_action)
+
+    time.sleep(degrees)
+
+    left_motor.stop()
+    right_motor.stop()
+
 
 
 def spin_left_by_encoders(degrees, speed, stop_action):
@@ -91,6 +106,7 @@ def spin_right_by_time(degrees, speed, stop_action):
 
 def spin_right_by_encoders(degrees, speed, stop_action):
     """ Calls spin_left_by_encoders with negative speeds to achieve spin_right motion. """
+
 
 
 test_spin_left_spin_right()
