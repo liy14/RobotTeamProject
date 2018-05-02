@@ -144,6 +144,7 @@ def backward_by_time(inches, speed, stop_action):
     left_motor.stop(stop_action=stop_action)
     right_motor.stop(stop_action=stop_action)
 
+
 def backward_by_encoders(inches, speed, stop_action):
     """ Calls forward_by_encoders with negative speeds to achieve backward motion. """
     left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
