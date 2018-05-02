@@ -36,7 +36,7 @@ def test_spin_left_spin_right():
     assert right_motor.connected
 
     spin_left_seconds(4, 50, "brake")
-    spin_left_by_time(90,50,"brake")
+    spin_left_by_time(90, 50, "brake")
 
 
 
@@ -48,16 +48,14 @@ def spin_left_seconds(seconds, speed, stop_action):
     """
     left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
     right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
-    seconds = int(input('Time'))
-    print(speed, stop_action, seconds)
-    print(type(speed))
-    left_motor.run_forever(speed_sp=(-8 * speed), stop_action=stop_action)
-    right_motor.run_forever(speed_sp=(8 * speed), stop_action=stop_action)
+    assert left_motor.connected
+    assert right_motor.connected
 
+    left_motor.run_forever(speed_sp=-speed)
+    right_motor.run_forever(speed_sp=speed)
     time.sleep(seconds)
-
     left_motor.stop()
-    right_motor.stop()
+    right_motor.stop(stop_action=stop_action)
 
 
 
@@ -74,15 +72,14 @@ def spin_left_by_time(degrees, speed, stop_action):
     """
     left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
     right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
-    degrees = int(input('Degrees'))
+    assert left_motor.connected
+    assert right_motor.connected
 
-    left_motor.run_forever(speed_sp=(-8 * speed), stop_action=stop_action)
-    right_motor.run_forever(speed_sp=(8 * speed), stop_action=stop_action)
-
-    time.sleep(degrees)
-
+    left_motor.run_forever(speed_sp=-speed)
+    right_motor.run_forever(speed_sp=speed)
+    time.sleep(4 * degrees / speed)
     left_motor.stop()
-    right_motor.stop()
+    right_motor.stop(stop_action=stop_action)
 
 
 
@@ -94,19 +91,67 @@ def spin_left_by_encoders(degrees, speed, stop_action):
       1. Compute the number of degrees the wheels should spin to achieve the desired distance.
       2. Move until the computed number of degrees is reached.
     """
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+    assert left_motor.connected
+    assert right_motor.connected
+
+    left_motor.run_to_rel_pos(position_sp=-4.7 * degrees, speed_sp=speed)
+    right_motor.run_to_rel_pos(position_sp=4.7 * degrees, speed_sp=speed)
+    left_motor.wait_while(ev3.Motor.STATE_RUNNING)
+    right_motor.wait_while(ev3.Motor.STATE_RUNNING)
+    left_motor.stop()
+    right_motor.stop(stop_action=stop_action)
+
+
 
 
 def spin_right_seconds(seconds, speed, stop_action):
     """ Calls spin_left_seconds with negative speeds to achieve spin_right motion. """
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+    assert left_motor.connected
+    assert right_motor.connected
+
+    left_motor.run_forever(speed_sp=speed)
+    right_motor.run_forever(speed_sp=-speed)
+    time.sleep(seconds)
+    left_motor.stop()
+    right_motor.stop(stop_action=stop_action)
 
 
 def spin_right_by_time(degrees, speed, stop_action):
     """ Calls spin_left_by_time with negative speeds to achieve spin_right motion. """
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+    assert left_motor.connected
+    assert right_motor.connected
 
+    left_motor.run_forever(speed_sp=speed)
+    right_motor.run_forever(speed_sp=-speed)
+    time.sleep(4 * degrees / speed)
+    left_motor.stop()
+    right_motor.stop(stop_action=stop_action)
 
 def spin_right_by_encoders(degrees, speed, stop_action):
     """ Calls spin_left_by_encoders with negative speeds to achieve spin_right motion. """
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+    assert left_motor.connected
+    assert right_motor.connected
+
+    left_motor.run_to_rel_pos(position_sp=4.7 * degrees, speed_sp=speed)
+    right_motor.run_to_rel_pos(position_sp=-4.7 * degrees, speed_sp=speed)
+    left_motor.wait_while(ev3.Motor.STATE_RUNNING)
+    right_motor.wait_while(ev3.Motor.STATE_RUNNING)
+    left_motor.stop()
+    right_motor.stop(stop_action=stop_action)
 
 
 
-test_spin_left_spin_right()
+#test_spin_left_spin_right()
+spin_left_by_time(90,50,"brake")
+#spin_left_by_encoders(180, 50, 'brake')
+#spin_right_seconds(3,50 , 'brake')
+#spin_right_by_time(90, 50, 'brake')
+#spin_right_by_encoders(180, 70, 'brake')
