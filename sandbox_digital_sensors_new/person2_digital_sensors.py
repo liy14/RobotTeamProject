@@ -120,6 +120,11 @@ def print_state_of_left_button_on_brick(n, seconds_per_print):
     #           Tests have been written for you (above).
     # -------------------------------------------------------------------------
 
+    for k in range (n):
+        print (ev3.Button.left)
+        time.sleep(seconds_per_print)
+
+
 
 def run_test_wait_for_press_on_brick_button():
     """ Tests the   wait_for_UP_button_press   function. """
@@ -180,6 +185,11 @@ def wait_for_up_button_press():
     #           Tests have been written for you (above).
     # -------------------------------------------------------------------------
 
+    while True:
+        if ev3.Button.up == True:
+            break
+        else:
+            time.sleep(.05)
 
 def run_test_show_leds():
     """ Tests the   show_leds   function. """
@@ -205,6 +215,22 @@ def show_leds():
        -- DOWN button:  Both LEDs turn off (i.e., to BLACK).
        -- BACKSPACE button: The program breaks out of the loop.
     """
+    button = ev3.Button()
+    while True:
+        if button.backspace == True:
+            break
+        elif button.left == True:
+            ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
+
+        elif button.right == True:
+            ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
+
+        elif button.up == True:
+            ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.AMBER)
+
+        elif button.down == True:
+            ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
+            ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
 
 
 # -----------------------------------------------------------------------------
