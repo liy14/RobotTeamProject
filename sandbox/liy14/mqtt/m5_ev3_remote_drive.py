@@ -56,13 +56,14 @@ class MyDelegate(object):
     def shutdown(self):
         self.running = False
 
+
 def main():
     print("--------------------------------------------")
     print(" Motion communication")
     print(" Press Back to exit when done.")
     print("--------------------------------------------")
     ev3.Sound.speak("Let's go").wait()
-    robot = robo.Snatch3r()
+    robot = robo.Snatch3r
     mqtt_client = com.MqttClient(robot)
     mqtt_client.connect_to_pc()
     # mqtt_client.connect_to_pc("35.194.247.175")  # Off campus IP address of a GCP broker
