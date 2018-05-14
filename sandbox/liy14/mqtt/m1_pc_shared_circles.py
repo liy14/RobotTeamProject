@@ -97,7 +97,7 @@ def left_mouse_click(event, mqtt_client):
     my_color = "magenta"  # Make your color unique
 
     # Optional test: If you just want to see circles purely local to your computer the four lines below would work.
-    # You could uncomment it to see it temporarily, but make sure to comment it back out before todo7 below.
+    # You could uncomment it to see it temporarily, but  make sure to comment it back out before todo7 below.
     # canvas = event.widget
     # canvas.create_oval(event.x - 10, event.y - 10,
     #                    event.x + 10, event.y + 10,
