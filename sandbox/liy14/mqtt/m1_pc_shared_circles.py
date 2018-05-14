@@ -19,12 +19,12 @@ Authors: David Fisher and Yi Li.
 """  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 
-# TODO: 2. Select one team member to open libs/mqtt_remote_method_calls.py and complete the TO DO that is in that file.
+# DONE: 2. Select one team member to open libs/mqtt_remote_method_calls.py and complete the TO DO that is in that file.
 # After making that change, they should commit their work and all other team members should do a VCS -> Update
 # After all team members see that file changed you can move on to the next TO DO
 # Also someone should update the libs/mqtt_remote_method_calls.py file on the robot too (at some point before m3).
 
-# TODO: 3. Run this program as is on your computer and watch the logs as you click in the window.
+# DONE: 3. Run this program as is on your computer and watch the logs as you click in the window.
 # Next see if you can review the code to see how it works.  You can do this individually or as a team.
 
 
@@ -38,13 +38,13 @@ from tkinter import ttk
 import mqtt_remote_method_calls as com
 #
 #
-# class MyDelegate(object):
-#
-#     def __init__(self, canvas):
-#         self.canvas = canvas
-#
-#     def on_circle_draw(self, color, x, y):
-#         self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill=color, width=3)
+class MyDelegate(object):
+
+    def __init__(self, canvas):
+        self.canvas = canvas
+
+    def on_circle_draw(self, color, x, y):
+        self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill=color, width=3)
 
 
 def main():
@@ -76,10 +76,11 @@ def main():
 
     # Create an MQTT connection
     # TODO: 5. Delete the line below (mqtt_client = None) then uncomment the code below.  It creates a real mqtt client.
-    mqtt_client = None
-    # my_delegate = MyDelegate(canvas)
+    # mqtt_client = None
+    my_delegate = MyDelegate(canvas)
     # mqtt_client = com.MqttClient(my_delegate)
     # mqtt_client.connect("draw", "draw")
+    # mqtt_client.connect_to_pc("draw", "draw", "broker.mqttdashboard.com")
 
     root.mainloop()
 
