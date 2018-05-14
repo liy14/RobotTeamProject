@@ -37,6 +37,10 @@ class Snatch3r(object):
         self.left_motor.run_to_rel_pos(speed_sp=speed,postion_sp=-degrees_for_motor,stop_action=stop_action)
         self.right_motor.run_to_rel_pos(speed_sp=speed, postion_sp=-degrees_for_motor, stop_action=stop_action)
     """Commands for the Snatch3r robot that might be useful in many different programs."""
+
+    def loop_forever(self):
+        while True:
+            time.sleep(0.1)
     
     # TODO: Implement the Snatch3r class as needed when working the sandox exercises
     # (and delete these comments)
