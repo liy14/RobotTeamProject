@@ -33,9 +33,9 @@ def main():
     """ Calls the   TEST   functions in this module. """
     # Uncomment these tests as you proceed through this module.
 
-    # run_test_buttons_on_ir_beacon()
-    # run_test_wait_for_press_on_ir_beacon_button()
-    # run_test_make_sounds()
+    run_test_buttons_on_ir_beacon()
+    run_test_wait_for_press_on_ir_beacon_button()
+    run_test_make_sounds()
 
 
 def run_test_buttons_on_ir_beacon():
@@ -116,6 +116,11 @@ def print_state_of_blue_up_button_on_ir_beacon(n, seconds_per_print):
        1. Prints the STATE of the BLUE_UP button on the ev3 IR Beacon.
        2. SLEEPs for the given number of seconds.
     """
+    remote = ev3.RemoteControl(channel=1)
+
+    for k in range(n):
+        print(remote.blue_up)
+        time.sleep(seconds_per_print)
     # -------------------------------------------------------------------------
     # TODO: 3.  Implement and test this function.
     #           Tests have been written for you (above).
@@ -184,6 +189,12 @@ def wait_for_RED_DOWN_button_press():
             (i.e., when the UP button is pressed).
        2. Sleeps for a small amount (say, 0.05 seconds).
     """
+    remote = ev3.RemoteControl(channel=2)
+
+    while True:
+        if remote.red_down:
+            break
+        time.sleep(0.05)
     # -------------------------------------------------------------------------
     # TODO: 4.  Implement and test this function.
     #           Tests have been written for you (above).
@@ -201,6 +212,7 @@ def run_test_make_sounds():
     print('  ** CHANGE the channel to 3. **')
     print('Then press the IR Beacon buttons to make sounds.')
     print()
+    make_sounds()
 
 
 def make_sounds():
@@ -215,6 +227,17 @@ def make_sounds():
               "/home/robot/csse120/assets/sounds/awesome_pcm.wav"
        -- BLUE_DOWN button:  The program breaks out of the loop.
     """
+    remote = ev3.RemoteControl(channel=3)
+    sound = ev3.Sound
+    while True:
+        if remote.red_up:
+            sound.beep()
+        if remote.red_down:
+            sound.speak('bu zai, cho nee ma').wait()
+        if remote.blue_up:
+            sound.play('/home/robot/csse120/assets/sounds/awesome_pcm.wav')
+        if remote.blue_down:
+            break
 
 
 # -----------------------------------------------------------------------------
