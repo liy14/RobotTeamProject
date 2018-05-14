@@ -41,6 +41,8 @@ class Snatch3r(object):
     def loop_forever(self):
         while True:
             time.sleep(0.1)
+
+
     
     # TODO: Implement the Snatch3r class as needed when working the sandox exercises
     # (and delete these comments)
