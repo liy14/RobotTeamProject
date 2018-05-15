@@ -17,32 +17,70 @@ import time
 
 
 class Snatch3r(object):
-    def _init_(self):
+    def __init__(self):
         self.left_motor=ev3.LargeMotor(ev3.OUTPUT_B)
         self.right_motor=ev3.LargeMotor(ev3.OUTPUT_C)
 
         assert self.left_motor.connected
         assert self.right_motor.connected
 
-    def forward(self, inches, speed=100,stop_action='brake'):
+        self.arm_motor=ev3.MediumMotor(ev3.OUTPUT_A)
+
+        assert self.arm_motor.connected
+
+        self.running = True
+
+    def forward_inches(self, inches, speed=100,stop_action='brake'):
         k = 4.5
         degrees_for_motor=k+ inches/speed
         self.left_motor.run_to_rel_pos(speed_sp=speed,postion_sp=degrees_for_motor,stop_action=stop_action)
         self.right_motor.run_to_rel_pos(speed_sp=speed, postion_sp=degrees_for_motor, stop_action=stop_action)
     """Commands for the Snatch3r robot that might be useful in many different programs."""
 
-    def backward(self, inches, speed=100,stop_action='brake'):
+    def forward(self, left_speed, right_speed):
+        self.left_motor.run_forever(speed_sp=left_speed)
+        self.right_motor.run_forever(speed_sp=right_speed)
+
+    def backward_inches(self, inches, speed=100,stop_action='brake'):
         k = 4.5
         degrees_for_motor = k + inches/speed
         self.left_motor.run_to_rel_pos(speed_sp=speed,postion_sp=-degrees_for_motor,stop_action=stop_action)
         self.right_motor.run_to_rel_pos(speed_sp=speed, postion_sp=-degrees_for_motor, stop_action=stop_action)
     """Commands for the Snatch3r robot that might be useful in many different programs."""
 
+    def back(self, left_speed, right_speed):
+        self.left_motor.run_forever(speed_sp=-left_speed)
+        self.right_motor.run_forever(speed_sp=-right_speed)
+
     def loop_forever(self):
         while True:
-            time.sleep(0.1)
+            if self.running is False:
+                 time.sleep(0.1)
 
+    def right(self, left_speed, right_speed):
+        self.left_motor.run_forever(speed_sp=left_speed)
 
+    def left(self, right_speed, left_speed):
+        self.left_motor.run_forever(speed_sp=right_speed)
+
+    def arm_up(self):
+        self.arm_motor.run_forever(speed_sp=400)
+        touch_sensor = ev3.TouchSensor
+        while True:
+            if touch_sensor.is_pressed:
+                break
+
+    def arm_down(self):
+        self.arm_motor.run_to_abs_pos(speed_sp=-400, position_sp=14.2)
+
+    def stop(self):
+        self.left_motor.stop()
+        self.right_motor.stop()
+        self.arm_motor.stop()
+
+    def shutdown(self):
+        ev3.Sound.speak('Goodbye').wait()
+        self.running = False
     
     # TODO: Implement the Snatch3r class as needed when working the sandox exercises
     # (and delete these comments)
