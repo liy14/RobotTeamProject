@@ -18,17 +18,19 @@ import time
 
 class Snatch3r(object):
     def __init__(self):
-        self.left_motor=ev3.LargeMotor(ev3.OUTPUT_B)
-        self.right_motor=ev3.LargeMotor(ev3.OUTPUT_C)
+        self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+        self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
 
         assert self.left_motor.connected
         assert self.right_motor.connected
 
-        self.arm_motor=ev3.MediumMotor(ev3.OUTPUT_A)
-
+        self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
         assert self.arm_motor.connected
 
         self.running = True
+
+        self.color_sensor = ev3.ColorSensor()
+        assert self.color_sensor.connected
 
     def forward_inches(self, inches, speed=100,stop_action='brake'):
         k = 4.5
