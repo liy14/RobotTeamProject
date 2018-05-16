@@ -60,7 +60,8 @@ class Snatch3r(object):
     def loop_forever(self):
         while True:
             if self.running is False:
-                 time.sleep(0.1)
+                 self.stop()
+
 
     def right(self, left_speed, right_speed):
         self.left_motor.run_forever(speed_sp=left_speed)
@@ -88,6 +89,8 @@ class Snatch3r(object):
     def shutdown(self):
         ev3.Sound.speak('Goodbye').wait()
         self.running = False
+
+
     
     # TODO: Implement the Snatch3r class as needed when working the sandox exercises
     # (and delete these comments)
