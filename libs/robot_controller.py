@@ -35,6 +35,9 @@ class Snatch3r(object):
         self.touch_sensor = ev3.TouchSensor()
         assert self.touch_sensor.connected
 
+        self.ir_sensor = ev3.InfraredSensor()
+        assert self.ir_sensor.connected
+
     def forward_inches(self, inches, speed=100,stop_action='brake'):
         k = 4.5
         degrees_for_motor=k+ inches/speed
