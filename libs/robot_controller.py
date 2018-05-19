@@ -118,8 +118,6 @@ class Snatch3r(object):
         self.stop()
 
     def stop_by(self,color):
-        print(color)
-        print(type(color))
         white_level = 50
         pick=False
         while not self.touch_sensor.is_pressed:
