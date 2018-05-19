@@ -75,23 +75,18 @@ class Snatch3r(object):
         self.left_motor.run_forever(speed_sp=20)
 
     def arm_up(self):
-        self.arm_motor.run_forever(speed_sp=400)
+        self.arm_motor.run_to_rel_pos(speed_sp=400, position_sp=7*360)
         print("Up!")
-        while True:
-            if self.touch_sensor.is_pressed:
-                ev3.Sound.beep()
-                self.arm_motor.stop()
-                break
+
 
     def arm_down(self):
         print('ready')
-        self.arm_motor.run_to_rel_pos(speed_sp=400, position_sp=-14.2*360)
+        self.arm_motor.run_to_rel_pos(speed_sp=400, position_sp=-7.2*360)
 
     def stop(self):
         print("really stop")
         self.left_motor.stop()
         self.right_motor.stop()
-        self.arm_motor.stop()
 
     def shutdown(self):
         ev3.Sound.speak('Goodbye').wait()
@@ -122,17 +117,32 @@ class Snatch3r(object):
                 self.right_motor.run_forever(speed_sp=right_speed)
         self.stop()
 
-    def follow_the_line(robot):
+    def stop_by(self,color):
+        print(color)
+        print(type(color))
         white_level = 50
-        while not robot.touch_sensor.is_pressed:
-            if robot.color_sensor.reflected_light_intensity < white_level:
-                robot.forward(50, 50)
+        pick=False
+        while not self.touch_sensor.is_pressed:
+            if self.color_sensor.reflected_light_intensity < white_level:
+                self.forward(200, 200)
             else:
-                robot.left_motor.run_forever(speed_sp=100)
-                robot.right_motor.run_forever(speed_sp=50)
-        robot.stop()
+                self.left_motor.run_forever(speed_sp=200)
+                self.right_motor.run_forever(speed_sp=100)
+            if pick is False and self.ir_sensor.proximity <= 40:
+                print(self.ir_sensor.proximity)
+                self.stop()
+                self.arm_up()
+                time.sleep(10)
+                pick=True
+            if pick is True and self.color_sensor.color == color:
+                self.stop()
+                self.arm_down()
+                break
+        self.stop()
 
     def drive_to_color(self, colo_to_seek):
+        print(colo_to_seek)
+        print(type(colo_to_seek))
         COLOR_NAMES = ["None", "Black", "Blue", "Green", "Yellow", "Red", "White", "Brown"]
         ev3.Sound.speak("Seeking " ,COLOR_NAMES[colo_to_seek]).wait()
         self.forward(300, 300)
@@ -140,15 +150,7 @@ class Snatch3r(object):
             if self.color_sensor.color == colo_to_seek:
                 self.stop()
 
-    def stop_by(self):
-        self.follow_the_line()
-        if self.ir_sensor.proximity <= 10:
-            self.stop()
-            self.arm_up()
-            time.sleep(10)
-            self.follow_the_line()
-            self.drive_to_color(colo_to_seek=a)
-            self.arm_down()
+
 
 
 

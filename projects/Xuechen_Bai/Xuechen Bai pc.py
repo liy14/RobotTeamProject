@@ -25,6 +25,11 @@ def main():
     right_speed_entry.insert(0, "600")
     right_speed_entry.grid(row=1, column=2)
 
+    color_label = ttk.Label(main_frame, text='Color')
+    color_label.grid(row = 5, column=0)
+    color_entry = ttk.Entry(main_frame, width=8)
+    color_entry.grid(row=6, column=0)
+
     stop_button = ttk.Button(main_frame, text="Stop")
     stop_button.grid(row=3, column=1)
     stop_button['command'] = lambda: stop(mqtt_client)
@@ -32,8 +37,8 @@ def main():
 
     go_button = ttk.Button(main_frame, text="Go")
     go_button.grid(row=3, column=2)
-    go_button['command'] = lambda: right(mqtt_client, left_speed_entry, right_speed_entry)
-    root.bind('<Up>', lambda event: right(mqtt_client, left_speed_entry, right_speed_entry))
+    go_button['command'] = lambda: go(mqtt_client,color_entry)
+    root.bind('<Up>', lambda event: go(mqtt_client, color_entry))
 
     q_button = ttk.Button(main_frame, text="Quit")
     q_button.grid(row=5, column=1)
@@ -43,17 +48,11 @@ def main():
     e_button.grid(row=3, column=0)
     e_button['command'] = (lambda: quit_program(mqtt_client, True))
 
-    red_button = ttk.Button(main_frame, text='Red')
-    red_button.grid(row=6, column=0)
-    red_button['command'] = lambda state: drive_color(mqtt_client, ev3.ColorSensor.COLOR_RED)
+    reset_button = ttk.Button(main_frame, text='Reset')
+    reset_button.grid(row=4, column=2)
+    reset_button['command'] = lambda : go_down(mqtt_client)
 
-    yellow_button = ttk.Button(main_frame, text='Yellow')
-    yellow_button.grid(row=6, column=1)
-    yellow_button['command'] = lambda state: drive_color(mqtt_client, ev3.ColorSensor.COLOR_YELLOW)
 
-    white_button = ttk.Button(main_frame, text='Write')
-    white_button.grid(row=6, column=2)
-    white_button['command'] = lambda state: drive_color(mqtt_client, ev3.ColorSensor.COLOR_WHITE)
 
 
 
@@ -89,13 +88,16 @@ def send_down(mqtt_client):
     print("arm_down")
     mqtt_client.send_message("arm_down")
 
-def drive_color(mqtt_client, a):
+def drive_color(mqtt_client, color_entry):
     print("drive to")
-    mqtt_client.send_message("drive_to_color",a)
+    mqtt_client.send_message("drive_to_color",[int(color_entry.get())])
 
-def go(mqtt_client,a):
-    print("go")
-    mqtt_client.send_message("stop_by",a)
+def go(mqtt_client, color_entry):
+    print("Go!")
+    print(int(color_entry.get()))
+    print(type(int(color_entry.get())))
+    mqtt_client.send_message('stop_by', [int(color_entry.get())])
+
 
 
 def quit_program(mqtt_client, shutdown_ev3):
@@ -104,6 +106,10 @@ def quit_program(mqtt_client, shutdown_ev3):
         mqtt_client.send_message("shutdown")
     mqtt_client.close()
     exit()
+
+def go_down(mqtt_client):
+    print('go down')
+    mqtt_client.send_message('arm_down')
 
 
 
