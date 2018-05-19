@@ -93,6 +93,46 @@ class Snatch3r(object):
         ev3.Sound.speak('Goodbye').wait()
         self.running = False
 
+    def ir(self, left_speed, right_speed):
+        while not self.touch_sensor.is_pressed:
+            if self.ir_sensor.proximity <= 50:
+                print(self.ir_sensor.proximity)
+                self.arm_up()
+            else:
+                self.left_motor.run_forever(speed_sp=left_speed)
+                self.right_motor.run_forever(speed_sp=right_speed)
+        self.stop()
+
+    def follow_the_line(robot):
+        white_level = 50
+        while not robot.touch_sensor.is_pressed:
+            if robot.color_sensor.reflected_light_intensity < white_level:
+                robot.forward(50, 50)
+            else:
+                robot.left_motor.run_forever(speed_sp=100)
+                robot.right_motor.run_forever(speed_sp=50)
+        robot.stop()
+
+    def drive_to_color(self, colo_to_seek):
+        COLOR_NAMES = ["None", "Black", "Blue", "Green", "Yellow", "Red", "White", "Brown"]
+        ev3.Sound.speak("Seeking " ,COLOR_NAMES[colo_to_seek]).wait()
+        self.forward(300, 300)
+        while True:
+            if self.color_sensor.color == colo_to_seek:
+                self.stop()
+
+    def stop_by(self):
+        self.follow_the_line()
+        if self.ir_sensor.proximity <= 10:
+            self.stop()
+            self.arm_up()
+            time.sleep(10)
+            self.follow_the_line()
+            self.drive_to_color(colo_to_seek=a)
+            self.arm_down()
+
+
+
 
     
     # TODO: Implement the Snatch3r class as needed when working the sandox exercises

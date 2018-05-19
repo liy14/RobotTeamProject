@@ -109,7 +109,6 @@ def drive_to_color(button_state, robot, color_to_seek):
                 break
 
 def handle_shutdown(button_state, dc):
-    """Exit the program."""
     if button_state:
         dc.running = False
 
