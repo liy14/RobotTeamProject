@@ -14,6 +14,7 @@
 import ev3dev.ev3 as ev3
 import math
 import time
+from random import randint
 
 
 class Snatch3r(object):
@@ -65,7 +66,6 @@ class Snatch3r(object):
             if self.running is False:
                  self.stop()
 
-
     def right(self, left_speed, right_speed):
         self.left_motor.run_forever(speed_sp=left_speed)
         self.right_motor.run_forever(speed_sp=20)
@@ -76,15 +76,19 @@ class Snatch3r(object):
 
     def arm_up(self):
         self.arm_motor.run_forever(speed_sp=400)
-        touch_sensor = ev3.TouchSensor
+        print("Up!")
         while True:
-            if touch_sensor.is_pressed:
+            if self.touch_sensor.is_pressed:
+                ev3.Sound.beep()
+                self.arm_motor.stop()
                 break
 
     def arm_down(self):
-        self.arm_motor.run_to_abs_pos(speed_sp=-400, position_sp=14.2)
+        print('ready')
+        self.arm_motor.run_to_rel_pos(speed_sp=400, position_sp=-14.2*360)
 
     def stop(self):
+        print("really stop")
         self.left_motor.stop()
         self.right_motor.stop()
         self.arm_motor.stop()
@@ -92,6 +96,21 @@ class Snatch3r(object):
     def shutdown(self):
         ev3.Sound.speak('Goodbye').wait()
         self.running = False
+
+#------------------------Liy14---------------------------------------------------------------
+    def wake(self, name, left_speed, right_speed, frequency, add):
+        while not self.touch_sensor.is_pressed:
+            ev3.Sound.speak(name + add).wait(frequency)
+            if self.ir_sensor.proximity <= 70:
+                print(self.ir_sensor.proximity)
+                self.left_motor.run_forever(speed_sp=randint(100,601))
+                self.right_motor.run_forever(speed_sp=randint(-600,-99))
+            else:
+                self.left_motor.run_forever(speed_sp=left_speed)
+                self.right_motor.run_forever(speed_sp=right_speed)
+        self.stop()
+#--------------------------------------------------------------------------------------------
+
 
     def ir(self, left_speed, right_speed):
         while not self.touch_sensor.is_pressed:
@@ -134,7 +153,7 @@ class Snatch3r(object):
 
 
 
-    
+
     # TODO: Implement the Snatch3r class as needed when working the sandox exercises
     # (and delete these comments)
 
